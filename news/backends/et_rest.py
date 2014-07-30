@@ -24,6 +24,7 @@ class ExactTargetREST(object):
     api_urls = {
         'auth': 'https://auth.exacttargetapis.com/v1/requestToken',
         'sms_send': 'https://www.exacttargetapis.com/sms/v1/messageContact/{msg_id}/send',
+        'email_send': 'https://www.exacttargetapis.com/messaging/v1/messageDefinitionSends/{send_id}/send',
         'validate': 'https://www.exacttargetapis.com/address/v1/validateEmail',
     }
 
@@ -105,6 +106,19 @@ class ExactTargetREST(object):
             'Subscribe': False,
         }
         return self.request('sms_send', data, url_params={'msg_id': message_id})
+
+    def send_email(self, email, message_id):
+        data = {
+            'From': {
+                'Address': 'pmac@mozilla.com',
+                'Name': 'Email Overlord',
+            },
+            'To': {
+                'Address': email,
+                'SubscriberKey': email,
+            }
+        }
+        return self.request('email_send', data, url_params={'send_id': message_id})
 
     def validate_email(self, email):
         data = {
